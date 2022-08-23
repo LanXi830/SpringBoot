@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.qf.CJDX_MANAGER.mapper.RoleMapper">
+
+
+
+    <insert id="add" parameterType="com.qf.CJDX_MANAGER.entity.Role">
+        insert into cjdx_role(roleCode,roleName,createdBy,creationDate)values (#{roleCode},#{roleName},#{createdBy},#{creationDate})
+    </insert>
+
+
+
+    <!--查询角色数据列表-->
+    <select id="getRoleList" resultType="com.qf.CJDX_MANAGER.entity.Role">
+        select id,roleCode,roleName,creationDate from cjdx_role
+    </select>
+
+
+    <!--验证是否存在-->
+    <select id="selectRoleCodeExist" resultType="com.qf.CJDX_MANAGER.entity.Role">
+        select * from cjdx_role r
+        <trim prefix="where" prefixOverrides="and|or">
+            and r.roleCode=#{roleCode}
+        </trim>
+    </select>
+
+
+    <select id="getRoleById" resultType="com.qf.CJDX_MANAGER.entity.Role">select r.*from cjdx_role r where r.id = #{id}</select>
+
+    <!-- 修改保存用户-->
+    <update id="modify" parameterType="com.qf.CJDX_MANAGER.entity.Role">
+        update cjdx_role
+        <trim suffix="where id = #{id}" suffixOverrides="," prefix="set">
+        <if test="roleName != null">roleName = #{roleName},</if>
+        <if test="modifyBy != null">modifyBy = #{modifyBy},</if>
+        <if test="modifyDate != null">modifyDate = #{modifyDate},</if>
+    </trim>
+    </update>
+
+
+    <delete id="deleteRoleById" parameterType="int">
+        delete from cjdx_role where id=#{id}
+    </delete>
+
+    <select id="selectUserNum" resultType="int">
+        select count(userRole) from cjdx_user where userRole=#{id}
+    </select>
+
+
+
+</mapper>

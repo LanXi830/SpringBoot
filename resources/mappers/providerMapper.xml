@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.qf.CJDX_MANAGER.mapper.ProviderMapper">
+
+
+    <!-- 添加商家-->
+    <insert id="add" parameterType="com.qf.CJDX_MANAGER.entity.Provider">insert into cjdx_provider(proCode,proName,proDesc,proContact,proPhone,proAddress,proFax,createdBy,creationDate,modifyDate,modifyBy,companyLicPicPath,orgCodePicPath) value (#{proCode},#{proName},#{proDesc},#{proContact},#{proPhone},#{proAddress},#{proFax},#{createdBy},#{creationDate},#{modifyDate},#{modifyBy},#{companyLicPicPath},#{orgCodePicPath}) </insert>
+
+
+
+    <!-- 根据编码和名称查询记录数量 -->
+    <select resultType="int" id="getTotalCount">
+    select count(1) from cjdx_provider p where 1=1
+    <if test="queryProCode != null">and p.proCode like CONCAT('%',#{queryProCode},'%') </if>
+    <if test="queryProName != null">and p.proName like CONCAT('%',#{queryProName},'%') </if>
+    </select>
+
+    <resultMap id="providerList" type="com.qf.CJDX_MANAGER.entity.Provider">
+    <result column="id" property="id"/>
+    <result column="proCode" property="proCode"/>
+    <result column="proName" property="proName"/>
+    <result column="proContact" property="proContact"/>
+    <result column="proPhone" property="proPhone"/>
+    <result column="proFax" property="proFax"/>
+    <result column="creationDate" property="creationDate"/>
+    </resultMap>
+
+    <!-- 查询供应商数据列表-->
+    <select id="getProviderList" resultMap="providerList">
+    select * from cjdx_provider p where 1=1
+    <if test="queryProCode != null">and p.proCode like CONCAT('%',#{queryProCode},'%') </if>
+    <if test="queryProName != null">and p.proName like CONCAT('%',#{queryProName},'%') </if>
+    order by p.creationDate desc limit #{currentPageNo},#{pageSize}
+    </select>
+
+    <!--查询供应商-->
+
+    <select id="getProviderById" resultType="com.qf.CJDX_MANAGER.entity.Provider">select p.*from cjdx_provider p where p.id = #{id}</select>
+
+    <!--查询所有-->
+    <select id="getAllList" resultType="com.qf.CJDX_MANAGER.entity.Provider">
+        select * from cjdx_provider
+    </select>
+
+    <!--修改供应商-->
+    <update id="modify" parameterType="com.qf.CJDX_MANAGER.entity.Provider">
+        update cjdx_provider
+        <trim prefix="set" suffixOverrides="," suffix="where id = #{id}">
+            <if test="proCode != null">proCode = #{proCode},</if>
+            <if test="proName != null">proName = #{proName},</if>
+            <if test="proDesc != null">proDesc = #{proDesc},</if>
+            <if test="proContact != null">proContact = #{proContact},</if>
+            <if test="proPhone != null">proPhone = #{proPhone},</if>
+            <if test="proAddress != null">proAddress = #{proAddress},</if>
+            <if test="proFax != null">proFax = #{proFax},</if>
+            <if test="createdBy != null">createdBy = #{createdBy},</if>
+            <if test="creationDate != null">creationDate = #{creationDate},</if>
+            <if test="modifyBy != null">modifyBy = #{modifyBy},</if>
+            <if test="modifyDate != null">modifyDate = #{modifyDate},</if>
+            <if test="companyLicPicPath != null">companyLicPicPath = #{companyLicPicPath},</if>
+            <if test="orgCodePicPath != null">orgCodePicPath = #{orgCodePicPath}</if>
+        </trim>
+    </update>
+
+
+    <!--删除供应商-->
+    <delete id="deleteProviderById" parameterType="int">
+        delete from cjdx_provider where id = #{id}
+    </delete>
+
+</mapper>
